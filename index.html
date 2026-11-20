@@ -1,207 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0b16">
-<title>Sankalpa · Vedic Space Goals</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saṅkalpa · Vedic Space</title>
+<meta name="description" content="Vedic Space Saṅkalpa: set a resolve, see it done, and take the next step each day.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<script>try{var t=localStorage.getItem("vs-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
 <style>
-:root{
-  --bg:#0a0b16; --bg2:#0f1126; --card:#14172e; --card2:#1b1f3d; --line:#272c50;
-  --text:#eef0ff; --mute:#9aa0c7; --gold:#f6c453; --saffron:#ff9a3c; --green:#34d399; --red:#f87171;
-  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
-  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  --r:16px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{color-scheme:dark}
-body{font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--text);min-height:100dvh;
-  background:radial-gradient(900px 500px at 85% -10%,rgba(246,196,83,.10),transparent 60%),
-             radial-gradient(700px 500px at -10% 30%,rgba(139,124,246,.12),transparent 60%),var(--bg);
-  background-attachment:fixed}
+/* Vedic Space Saṅkalpa · the goals app. Palette and fonts come from base.css (shared with the Granthālaya);
+   the toolbar, title block, cards and footer follow library.css there. */
+:root{--ok:#2f7d55;--bad:#b3402e;
+  --text:var(--ink);--mute:var(--soft);--gold:var(--accent);--green:var(--ok);--red:var(--bad)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ok:#7cc39c;--bad:#e58a78}}
+:root[data-theme="dark"]{--ok:#7cc39c;--bad:#e58a78}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--latin)}
+body{font-size:16px;line-height:1.6;min-height:100dvh}
+h1,h2,h3,h4,p,ol,ul,blockquote{margin:0;padding:0}
 button,input,textarea,select{font:inherit;color:inherit}
-button{cursor:pointer;border:none;background:none}
-a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;text-wrap:balance}
-h1{font-size:clamp(34px,6vw,48px)} h2{font-size:26px} h3{font-size:21px}
+button{cursor:pointer;border:0;background:none;padding:0}
+a{color:var(--accent)}
+[lang="sa"]{font-family:var(--deva)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px 64px}
 
-/* layout */
-.app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100dvh}
-.rail{position:sticky;top:0;height:100dvh;padding:26px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:28px;background:rgba(10,11,22,.6);backdrop-filter:blur(10px)}
-.brand b{font-family:var(--serif);font-size:28px;font-weight:600;background:linear-gradient(90deg,var(--gold),var(--saffron));-webkit-background-clip:text;background-clip:text;color:transparent;display:block;line-height:1}
-.brand small{color:var(--mute);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.brand em{display:inline-block;margin-top:6px;font-style:normal;font-size:10px;font-weight:600;letter-spacing:.1em;padding:2px 8px;border-radius:99px;background:var(--red);color:#200}
-.nav{display:flex;flex-direction:column;gap:4px}
-.nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;color:var(--mute);font-weight:500}
-.nav a:hover{color:var(--text);background:rgba(255,255,255,.04)}
-.nav a.on{color:var(--gold);background:rgba(246,196,83,.10)}
-.nav svg{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-main{padding:36px clamp(16px,4vw,48px) 80px;max-width:1040px;width:100%}
-@media(max-width:820px){
-  .app{grid-template-columns:minmax(0,1fr)}
-  .rail{position:fixed;inset:auto 0 0 0;top:auto;height:auto;z-index:20;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:none;border-top:1px solid var(--line);background:rgba(10,11,22,.92)}
-  .brand{display:none}
-  .nav{flex-direction:row;flex:1;gap:0}
-  .nav a{flex:1;flex-direction:column;gap:2px;font-size:11px;padding:6px 2px;justify-content:center}
-  main{padding:22px 16px 110px}
+/* ---- toolbar, as in the Granthālaya */
+.topbar{position:sticky;top:0;z-index:6;background:color-mix(in srgb,var(--paper) 86%,transparent);
+  -webkit-backdrop-filter:saturate(1.3) blur(12px);backdrop-filter:saturate(1.3) blur(12px);
+  border-bottom:1px solid transparent;transition:border-color .25s,box-shadow .25s}
+.topbar.scrolled{border-bottom-color:var(--line);box-shadow:0 1px 14px rgba(60,40,20,.05)}
+.tb-in{max-width:820px;margin:0 auto;padding:0 20px;height:54px;display:flex;align-items:center;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex-shrink:0;border-radius:8px}
+.brand:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.brand img{width:32px;height:32px;display:block;transition:transform .3s ease}
+.brand:hover img{transform:rotate(-6deg) scale(1.05)}
+.brand-name{font-weight:600;font-size:1.02rem;letter-spacing:.01em;white-space:nowrap}
+.test-tag{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bad);border:1px solid var(--bad);border-radius:999px;padding:1px 8px}
+.tb-links{margin-left:auto;flex-shrink:0;display:flex;align-items:center;gap:20px;font-size:.88rem}
+.tb-links a{color:var(--soft);text-decoration:none;white-space:nowrap}
+.tb-links a:hover,.tb-links a:focus-visible,.tb-links a.on{color:var(--accent);outline:0}
+.tb-links a.on{font-weight:600}
+.theme-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--soft);
+  display:inline-grid;place-items:center;cursor:pointer;padding:0;flex-shrink:0;transition:color .2s,border-color .2s,background .2s}
+.theme-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.theme-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn .i-sun{display:none}
+.theme-btn[data-mode="dark"] .i-sun{display:block}
+.theme-btn[data-mode="dark"] .i-moon{display:none}
+/* on a phone the five sections move to a bar at the foot of the screen */
+.tabbar{display:none}
+@media (max-width:700px){
+  .tb-links a{display:none}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:6;padding:4px 6px calc(4px + env(safe-area-inset-bottom));
+    background:color-mix(in srgb,var(--paper) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px;border-radius:10px;font-size:.68rem;
+    letter-spacing:.03em;color:var(--soft);text-decoration:none}
+  .tabbar a.on{color:var(--accent);background:var(--accent-soft)}
+  .tabbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .wrap{padding-bottom:110px}
 }
 
-/* primitives */
-.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
-.mute{color:var(--mute)} .small{font-size:13px}
-.card{background:linear-gradient(180deg,var(--card),rgba(20,23,46,.75));border:1px solid var(--line);border-radius:var(--r);padding:20px}
-.stack{display:flex;flex-direction:column;gap:20px}
+/* ---- title, as on a Granthālaya page */
+header{text-align:center;padding:40px 0 10px}
+header .deva-title{font-family:var(--deva);font-size:2.6rem;line-height:1.3;font-weight:400}
+header .iast-title{font-style:italic;color:var(--soft);margin-top:4px;font-size:1.05rem}
+header .en-title{margin-top:2px;font-size:.95rem;color:var(--soft);text-wrap:balance}
+@media (max-width:560px){header{padding-top:28px}header .deva-title{font-size:2.1rem}}
+.sutra{max-width:560px;margin:14px auto 0;text-align:center;font-size:.9rem;color:var(--soft)}
+.sutra span{display:block;font-size:1.3rem;line-height:1.6;color:var(--ink)}
+.begin{display:flex;justify-content:center;gap:10px 14px;flex-wrap:wrap;margin-top:18px}
+
+/* ---- primitives */
+h2{font-size:.76rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);
+  padding:8px 0 7px;border-bottom:1px solid var(--line);margin-bottom:12px}
+h3{font-size:1.08rem;font-weight:600;line-height:1.35}
+h4{font-size:.72rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.mute{color:var(--soft)} .small{font-size:.84rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.stack{display:flex;flex-direction:column;gap:22px}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .spread{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 18px;border-radius:99px;font-weight:600;font-size:14px;background:var(--card2);border:1px solid var(--line);transition:transform .1s,background .15s,border-color .15s}
-.btn:hover{border-color:#3d4478} .btn:active{transform:scale(.97)}
-.btn.gold{background:linear-gradient(90deg,var(--gold),var(--saffron));color:#241500;border-color:transparent}
-.btn.ghost{background:transparent} .btn.sm{min-height:32px;padding:4px 12px;font-size:13px}
-.btn.danger{color:var(--red);border-color:rgba(248,113,113,.4);background:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:6px 18px;border-radius:999px;
+  font-size:.9rem;color:var(--accent);text-decoration:none;background:none;
+  border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));transition:background .2s,border-color .2s}
+.btn:hover,.btn:focus-visible{background:var(--accent-soft)}
+.btn.gold{background:var(--accent);color:var(--paper);border-color:var(--accent);font-weight:600}
+.btn.gold:hover{background:color-mix(in srgb,var(--accent) 86%,var(--ink))}
+.btn.ghost{border-color:transparent;color:var(--soft)}
+.btn.sm{min-height:32px;padding:3px 13px;font-size:.84rem}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
 .btn[disabled]{opacity:.4;pointer-events:none}
-input[type=text],input[type=date],input[type=url],textarea,select{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;outline:none}
-input:focus,textarea:focus,select:focus{border-color:var(--gold)}
-textarea{resize:vertical;min-height:72px}
-::placeholder{color:#6a7099}
-label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--mute)}
-label.f>span b{color:var(--text);font-weight:600}
-.chip{display:inline-flex;align-items:center;min-height:32px;padding:4px 14px;border-radius:99px;border:1px solid var(--line);font-size:13px;font-weight:500;color:var(--mute);background:transparent;cursor:pointer;white-space:nowrap}
-.chip.on,.chip:has(input:checked){color:var(--ac,var(--gold));border-color:var(--ac,var(--gold));background:color-mix(in srgb,var(--ac,var(--gold)) 12%,transparent)}
-.chip input{position:absolute;opacity:0;pointer-events:none}
+input[type=text],input[type=date],input[type=url],textarea,select{width:100%;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:8px 14px;outline:0;transition:border-color .2s,box-shadow .2s}
+.card input[type=text],.card textarea,.card select,dialog input,dialog textarea,dialog select{background:var(--paper)}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{resize:vertical;min-height:72px;display:block}
+::placeholder{color:var(--faint)}
+label.f,.f{display:flex;flex-direction:column;gap:5px;font-size:.84rem;color:var(--soft)}
+.f>span b{color:var(--ink);font-weight:600}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.tag{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ac,var(--gold))}
-.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:99px;background:var(--ac,var(--gold));transition:width .4s}
-.ring text{fill:var(--text);font:600 14px var(--sans)}
-.empty{text-align:center;padding:44px 20px;color:var(--mute)}
-.empty h3{color:var(--text);margin-bottom:6px}
+.chip{display:inline-flex;align-items:center;min-height:30px;padding:2px 13px;border-radius:999px;border:1px solid var(--line);
+  font-size:.84rem;color:var(--soft);background:none;cursor:pointer;white-space:nowrap}
+.chip.on,.chip:has(input:checked){color:color-mix(in srgb,var(--ac,var(--accent)) 78%,var(--ink));border-color:var(--ac,var(--accent));
+  background:color-mix(in srgb,var(--ac,var(--accent)) 13%,transparent)}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.tag{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--ac,var(--accent)) 78%,var(--ink))}
+.bar{height:5px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--ac,var(--accent));transition:width .4s}
+.ring text{fill:var(--ink);font:600 14px var(--latin)}
+.empty{text-align:center;padding:36px 20px;color:var(--soft);font-size:.92rem}
+.empty h3{color:var(--ink);margin-bottom:4px}
 
-/* today */
-.hero blockquote{margin-top:14px;padding-left:14px;border-left:2px solid var(--gold);color:var(--mute);max-width:560px}
-.hero blockquote span{display:block;font-size:19px;color:var(--text);line-height:1.6}
+/* ---- today */
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.tile{padding:16px}
-.tile b{display:block;font-size:30px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
-.tile span{font-size:12px;color:var(--mute);letter-spacing:.04em}
-@media(max-width:620px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.ritual{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
-@media(max-width:620px){.ritual{grid-template-columns:minmax(0,1fr)}}
+.tile{padding:14px 16px;text-align:center}
+.tile b{display:block;font-size:1.8rem;font-weight:400;line-height:1.25;font-variant-numeric:tabular-nums}
+.tile span{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+@media (max-width:620px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ritual{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start;padding:20px}
+@media (max-width:620px){.ritual{grid-template-columns:minmax(0,1fr)}}
 .steps{list-style:none;display:flex;flex-direction:column}
-.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
-.steps li:last-child{border-bottom:none;padding-bottom:0} .steps li:first-child{padding-top:0}
-.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--mute);flex:none}
-.done>.dot,.dot.done{background:var(--green);border-color:var(--green);color:#03281b}
-.steps h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.steps li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0;padding-bottom:0} .steps li:first-child{padding-top:0}
+.dot{width:26px;height:26px;border-radius:50%;border:1px solid var(--off);display:grid;place-items:center;font-size:.76rem;color:var(--soft)}
+.done>.dot{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.steps h4{font-size:.98rem;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
 .steps .body{display:flex;flex-direction:column;gap:8px}
-.check{width:24px;height:24px;border-radius:8px;border:2px solid #3d4478;flex:none;display:grid;place-items:center;font-size:13px;font-weight:700;color:transparent}
-.check.on{background:var(--green);border-color:var(--green);color:#03281b}
-.msline{display:flex;align-items:flex-start;gap:10px;text-align:left;width:100%;padding:6px 0}
-.msline.on span:last-child{text-decoration:line-through;color:var(--mute)}
+.check{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--off);flex:none;display:grid;place-items:center;
+  font-size:.8rem;font-weight:700;color:transparent;margin-top:2px}
+.check.on{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.msline{display:flex;align-items:flex-start;gap:10px;text-align:left;width:100%;padding:5px 0}
+.msline.on span:last-child{text-decoration:line-through;color:var(--faint)}
 
-/* goals */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.gcard{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(180deg,var(--card),rgba(20,23,46,.7));cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,border-color .15s}
-.gcard::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--ac)}
-.gcard:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 55%,var(--line))}
-.gcard.done{opacity:.72}
+/* ---- goals */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.gcard{display:flex;flex-direction:column;gap:9px;padding:16px 20px;border-radius:14px;border:1px solid var(--line);background:var(--card);
+  cursor:pointer;transition:border-color .2s,background .2s}
+.gcard:hover,.gcard:focus-visible{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 7%,var(--card))}
+.gcard.done{opacity:.7}
 .gcard h3{overflow-wrap:anywhere}
-.gcard .aff{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.gfoot{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--mute)}
+.gcard .aff{font-style:italic;font-size:.93rem;color:var(--soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gfoot{display:flex;justify-content:space-between;gap:10px;font-size:.78rem;color:var(--soft)}
 .gfoot span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 
-/* dialogs */
-dialog{border:1px solid var(--line);padding:0;background:var(--card);color:var(--text);border-radius:22px;width:min(700px,calc(100vw - 20px));max-height:calc(100dvh - 20px);margin:auto;overflow:auto}
-dialog::backdrop{background:rgba(4,5,14,.72);backdrop-filter:blur(5px)}
-.dhead{position:relative;padding:26px 24px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac,var(--gold)) 30%,var(--card)),var(--card) 75%);background-size:cover;background-position:center}
-.dhead.img{min-height:210px;display:flex;flex-direction:column;justify-content:flex-end}
-.dhead.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,22,.15),rgba(10,11,22,.92))}
+/* ---- dialogs */
+dialog{border:1px solid var(--line);padding:0;background:var(--card);color:var(--ink);border-radius:18px;
+  width:min(680px,calc(100vw - 20px));max-height:calc(100dvh - 20px);margin:auto;overflow:auto;box-shadow:0 14px 36px rgba(60,40,20,.18)}
+dialog::backdrop{background:rgba(28,25,22,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.dhead{position:relative;padding:24px 24px 18px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ac,var(--accent)) 14%,var(--card)),var(--card)) center/cover}
+.dhead.img{min-height:210px;display:flex;flex-direction:column;justify-content:flex-end;color:#f6efe6;border-bottom:0}
+.dhead.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,25,22,.1),rgba(28,25,22,.88))}
+.dhead.img .tag{color:#f0c9a8}
 .dhead>*{position:relative;z-index:1}
-.dhead h2{font-size:30px;overflow-wrap:anywhere;margin-top:4px;padding-right:36px}
-.x{position:absolute!important;top:14px;right:14px;z-index:2!important;width:36px;height:36px;border-radius:50%;background:rgba(10,11,22,.6);font-size:20px;line-height:1}
-.dbody{padding:22px 24px 26px;display:flex;flex-direction:column;gap:22px}
-.dbody h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px;font-weight:600}
-.quote{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.35}
+.dhead .dtitle{font-size:1.5rem;font-weight:600;line-height:1.3;overflow-wrap:anywhere;margin-top:2px;padding-right:36px}
+.x{position:absolute!important;top:12px;right:12px;z-index:2!important;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
+  background:var(--card);color:var(--soft);font-size:1.2rem;line-height:1}
+.x:hover{color:var(--accent);border-color:var(--accent)}
+.dbody{padding:20px 24px 24px;display:flex;flex-direction:column;gap:20px}
+.quote{font-style:italic;font-size:1.2rem;line-height:1.5}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media(max-width:560px){.two{grid-template-columns:minmax(0,1fr)}}
-.del{width:28px;height:28px;border-radius:8px;color:var(--mute);flex:none} .del:hover{color:var(--red);background:rgba(248,113,113,.1)}
-.inline{display:flex;gap:8px} .inline input{flex:1;min-width:0} .inline select{width:auto;flex:none}
-.log{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px}
-.log li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px}
-.log time{color:var(--mute);font-size:12px;padding-top:2px}
-.log b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
-input[type=range]{width:100%;accent-color:var(--gold)}
-.thumb{width:64px;height:64px;border-radius:12px;background:var(--bg2) center/cover;border:1px solid var(--line);flex:none}
+@media (max-width:560px){.two{grid-template-columns:minmax(0,1fr)}}
+.del{width:28px;height:28px;border-radius:8px;color:var(--faint);flex:none} .del:hover{color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.inline{display:flex;gap:8px;align-items:center} .inline input{flex:1;min-width:0} .inline select{width:auto;flex:none}
+.log{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.92rem}
+.log li{display:grid;grid-template-columns:70px minmax(0,1fr);gap:10px}
+.log time{color:var(--faint);font-size:.78rem;padding-top:3px}
+.log b{font-size:.68rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;margin-right:7px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.thumb{width:64px;height:64px;border-radius:12px;background:var(--paper) center/cover;border:1px solid var(--line);flex:none}
 
-/* manifest */
-.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media(max-width:720px){.pgrid{grid-template-columns:minmax(0,1fr)}}
-.pcard{display:flex;flex-direction:column;gap:12px}
-.pcard p{color:var(--mute);font-size:14px}
+/* ---- practices */
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:680px){.pgrid{grid-template-columns:minmax(0,1fr)}}
+.pcard{display:flex;flex-direction:column;gap:11px}
+.pcard p{color:var(--soft);font-size:.92rem}
 .dots{display:flex;gap:6px;flex-wrap:wrap}
-.dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid #3d4478}
-.dots i.on{background:var(--gold);border-color:var(--gold)}
-.r369{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 12px;align-items:center;font-size:13px;color:var(--mute)}
+.dots i{width:11px;height:11px;border-radius:50%;border:1px solid var(--off)}
+.dots i.on{background:var(--on);border-color:var(--on)}
+.r369{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 12px;align-items:center;font-size:.84rem;color:var(--soft)}
 
-/* vision */
-.board{columns:3 240px;column-gap:14px}
-.vt{break-inside:avoid;margin-bottom:14px;border-radius:var(--r);overflow:hidden;position:relative;min-height:190px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;cursor:pointer;border:1px solid var(--line);background:linear-gradient(150deg,color-mix(in srgb,var(--ac) 42%,#0d0f22),#0d0f22 80%) center/cover}
-.vt.img{min-height:280px}
-.vt.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,11,22,.9))}
+/* ---- vision board */
+.board{columns:3 230px;column-gap:12px}
+.vt{break-inside:avoid;margin-bottom:12px;border-radius:14px;overflow:hidden;position:relative;min-height:170px;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:16px 20px;cursor:pointer;border:1px solid var(--line);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 22%,var(--card)),var(--card) 80%) center/cover;transition:border-color .2s}
+.vt:hover,.vt:focus-visible{border-color:var(--ac)}
+.vt.img{min-height:270px;color:#f6efe6;border-color:transparent}
+.vt.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(28,25,22,.88))}
+.vt.img .tag{color:#f0c9a8}
 .vt>*{position:relative;z-index:1}
-.vt p{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.3;margin-top:4px;overflow-wrap:anywhere}
-.vt.done{filter:saturate(.5)}
+.vt p{font-style:italic;font-size:1.08rem;line-height:1.45;margin-top:4px;overflow-wrap:anywhere}
+.vt.done{opacity:.65}
 
-/* insights */
-.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;width:max-content;max-width:100%}
+/* ---- insights */
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;width:max-content;margin:0 auto}
 .heat i{width:14px;height:14px;border-radius:4px;background:var(--line)}
-.heat i[data-l="1"]{background:#5b4a1c}.heat i[data-l="2"]{background:#8a6c22}.heat i[data-l="3"]{background:#b88c2a}.heat i[data-l="4"]{background:#dca93a}.heat i[data-l="5"]{background:var(--gold)}
-.heat i.fut{opacity:.25}
+.heat i[data-l="1"]{background:color-mix(in srgb,var(--accent) 25%,var(--line))}
+.heat i[data-l="2"]{background:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.heat i[data-l="3"]{background:color-mix(in srgb,var(--accent) 65%,var(--line))}
+.heat i[data-l="4"]{background:color-mix(in srgb,var(--accent) 85%,var(--line))}
+.heat i[data-l="5"]{background:var(--accent)}
+.heat i.fut{opacity:.3}
 .heatwrap{overflow-x:auto;padding-bottom:4px}
-.arow{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:13px;padding:7px 0}
-.list{list-style:none} .list li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)} .list li:last-child{border:none}
-.list button{text-align:left;overflow-wrap:anywhere}
+.arow{display:grid;grid-template-columns:130px minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:.84rem;padding:8px 0;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}
+.arow b{font-weight:600;color:color-mix(in srgb,var(--ac) 78%,var(--ink))}
+.list{list-style:none} .list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.list li:last-child{border:0}
+.list button{text-align:left;overflow-wrap:anywhere} .list button:hover{color:var(--accent)}
 
-/* session stage */
-#stage{position:fixed;inset:0;z-index:100;background:#05060f center/cover;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 24px;text-align:center}
+/* ---- a session fills the screen; it is always the dark palette, so a photo can sit behind the words */
+#stage{--ink:#ece4da;--soft:#b8ab9d;--accent:#e09a6a;--accent-soft:#3a2a1f;--line:#3a332d;
+  position:fixed;inset:0;z-index:100;background:#1c1916 center/cover;color:var(--ink);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:70px 24px;text-align:center}
 #stage[hidden]{display:none}
-#stage::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(5,6,15,.55),rgba(5,6,15,.94))}
+#stage::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(28,25,22,.6),rgba(28,25,22,.95))}
 #stage>*{position:relative}
-.orb{width:150px;height:150px;border-radius:50%;margin-bottom:44px;background:radial-gradient(circle at 35% 30%,#ffe6a8,var(--gold) 45%,var(--saffron) 100%);box-shadow:0 0 80px rgba(246,196,83,.5);transform:scale(.7);opacity:.85;transition:transform 4s ease-in-out,opacity 4s}
+.orb{width:140px;height:140px;border-radius:50%;margin-bottom:40px;background:radial-gradient(circle at 35% 30%,#f7dcc4,#e09a6a 50%,#9a4a1c 100%);
+  box-shadow:0 0 70px rgba(224,154,106,.4);transform:scale(.7);opacity:.85;transition:transform 4s ease-in-out,opacity 4s}
 .orb.in,.orb.hold{transform:scale(1.15);opacity:1} .orb.out{transform:scale(.6);opacity:.7;transition-duration:6s}
 .orb.idle{animation:pulse 7s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(.9);opacity:1}}
-#stage .s-sub{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;min-height:20px}
-#stage .s-main{font-family:var(--serif);font-size:clamp(28px,5.4vw,50px);line-height:1.25;max-width:880px;margin-top:14px;animation:fade 1.2s ease;overflow-wrap:anywhere}
+#stage .s-sub{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);min-height:20px}
+#stage .s-main{font-size:clamp(1.5rem,4.4vw,2.5rem);font-weight:400;line-height:1.45;max-width:820px;margin-top:14px;animation:fade 1.2s ease;overflow-wrap:anywhere}
+#stage .s-main[lang="sa"]{font-size:clamp(2.4rem,7vw,3.6rem)}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}}
 .s-top{position:absolute!important;top:16px;right:16px;display:flex;gap:8px}
 .s-prog{position:absolute!important;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08)}
-.s-prog i{display:block;height:100%;background:var(--gold);transition:width .5s}
+.s-prog i{display:block;height:100%;background:var(--accent);transition:width .5s}
 .s-next{position:absolute!important;bottom:28px}
 
-#toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:var(--card2);border:1px solid var(--line);padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:calc(100vw - 32px)}
+#toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:8px 18px;border-radius:999px;
+  font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:calc(100vw - 32px)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:150}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:.8rem;color:var(--soft)}
+footer p{margin:4px 0}
+footer a{color:var(--soft)}
+footer a:hover{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="rail">
-    <div class="brand"><b>Sankalpa</b><small>Vedic Space Goals</small><span id="testBadge"></span></div>
-    <nav class="nav" aria-label="Sections">
-      <a href="#today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>Today</a>
-      <a href="#goals"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Goals</a>
-      <a href="#manifest"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></svg>Manifest</a>
-      <a href="#vision"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>Vision</a>
-      <a href="#insights"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Insights</a>
+<div class="topbar" id="topbar">
+  <div class="tb-in">
+    <a class="brand" href="#today" title="Saṅkalpa · Vedic Space">
+      <img src="assets/logo-128.png" alt="Vedic Space" width="32" height="32">
+      <span class="brand-name">Vedic Space</span>
+    </a>
+    <span id="testBadge"></span>
+    <nav class="tb-links nav" aria-label="Sections">
+      <a href="#today">Today</a>
+      <a href="#goals">Goals</a>
+      <a href="#manifest">Practice</a>
+      <a href="#vision">Vision</a>
+      <a href="#insights">Insights</a>
+      <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode">
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+      </button>
     </nav>
-  </aside>
-  <main id="view"></main>
+  </div>
 </div>
+<div class="wrap">
+  <main id="view"></main>
+  <footer>
+    <p>Vedic Space Saṅkalpa · <a href="https://vedicspace.in">vedicspace.in</a> ·
+       <a href="https://grantha.vedicspace.in">Granthālaya</a> ·
+       <a href="https://vishnu.vedicspace.in">Viṣṇu Sahasranāma</a> ·
+       <a href="https://blogs.vedicspace.in">Blogs</a></p>
+    <p>उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः — the resolve is kept by the step taken today.</p>
+  </footer>
+</div>
+<nav class="tabbar nav" aria-label="Sections">
+  <a href="#today"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>Today</a>
+  <a href="#goals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Goals</a>
+  <a href="#manifest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></svg>Practice</a>
+  <a href="#vision"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>Vision</a>
+  <a href="#insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Insights</a>
+</nav>
 <dialog id="formDlg" aria-label="Sankalpa form"></dialog>
 <dialog id="detailDlg" aria-label="Sankalpa details"></dialog>
 <div id="stage" hidden></div>
@@ -232,12 +318,12 @@ const DAYS = TEST ? 'goal_rituals_test' : 'goal_rituals';
 
 /* ---------- constants ---------- */
 const AREAS = {
-  dharma: { name: 'Dharma', hint: 'Purpose & service', c: '#f6c453' },
-  artha:  { name: 'Artha',  hint: 'Wealth & work',     c: '#34d399' },
-  kama:   { name: 'Kama',   hint: 'Love & joy',        c: '#f472b6' },
-  moksha: { name: 'Moksha', hint: 'Spirit & freedom',  c: '#a78bfa' },
-  arogya: { name: 'Arogya', hint: 'Health & vitality', c: '#38bdf8' },
-  vidya:  { name: 'Vidya',  hint: 'Learning & craft',  c: '#fb923c' }
+  dharma: { name: 'Dharma', hint: 'Purpose & service', c: '#b5651d' },
+  artha:  { name: 'Artha',  hint: 'Wealth & work',     c: '#2f8f6b' },
+  kama:   { name: 'Kama',   hint: 'Love & joy',        c: '#c4567a' },
+  moksha: { name: 'Moksha', hint: 'Spirit & freedom',  c: '#7b68c9' },
+  arogya: { name: 'Arogya', hint: 'Health & vitality', c: '#2e86ab' },
+  vidya:  { name: 'Vidya',  hint: 'Learning & craft',  c: '#b08a1e' }
 };
 const SUTRAS = [
   ['उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः', 'Works are accomplished by effort, not by wishing alone.'],
@@ -247,7 +333,7 @@ const SUTRAS = [
   ['उद्धरेदात्मनात्मानम्', 'Lift yourself by your own self.'],
   ['श्रद्धावान् लभते ज्ञानम्', 'The one who has faith attains knowledge.']
 ];
-const LOGK = { act: ['Action', 'var(--green)'], sign: ['Evidence', 'var(--gold)'], note: ['Note', 'var(--mute)'], viz: ['Visualized', '#a78bfa'] };
+const LOGK = { act: ['Action', 'var(--green)'], sign: ['Evidence', 'var(--accent)'], note: ['Note', 'var(--faint)'], viz: ['Visualized', 'var(--soft)'] };
 
 /* ---------- state + helpers ---------- */
 const S = { goals: [], days: {}, loaded: false, error: '', tab: 'today', filter: 'active', area: 'all', detailId: null, editId: null, formImage: '', vizGoal: '', muted: false, refocus: null };
@@ -313,15 +399,12 @@ const views = {
     const allMs = S.goals.flatMap(ms);
     const step = (ok, n, title, body) => `<li class="${ok ? 'done' : ''}"><span class="dot">${ok ? '✓' : n}</span><div class="body"><div><h4>${title}</h4></div>${body}</div></li>`;
     return `<div class="stack">
-      <header class="hero">
-        <p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-        <h1>${h < 5 ? 'The quiet hours.' : h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Good evening.'}</h1>
-        <blockquote><span lang="sa">${sutra[0]}</span>${sutra[1]}</blockquote>
-      </header>
+      ${head('सङ्कल्पः', 'Saṅkalpa', now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + (h < 5 ? 'the quiet hours' : h < 12 ? 'good morning' : h < 17 ? 'good afternoon' : 'good evening'),
+        `<blockquote class="sutra"><span lang="sa">${sutra[0]}</span>${sutra[1]}</blockquote>`)}
       <section class="tiles">
         <div class="card tile"><b>${streak()}</b><span>day streak</span></div>
         <div class="card tile"><b>${act.length}</b><span>active sankalpa${act.length === 1 ? '' : 's'}</span></div>
-        <div class="card tile"><b>${allMs.filter(m => m.done).length}<small class="mute" style="font-size:18px"> / ${allMs.length}</small></b><span>steps completed</span></div>
+        <div class="card tile"><b>${allMs.filter(m => m.done).length}<small class="mute" style="font-size:1rem"> / ${allMs.length}</small></b><span>steps completed</span></div>
         <div class="card tile"><b>${S.goals.filter(g => g.completed).length}</b><span>manifested</span></div>
       </section>
       <section class="card ritual">
@@ -335,7 +418,7 @@ const views = {
         </ol>
       </section>
       <section>
-        <div class="spread" style="margin-bottom:12px"><h2>In focus</h2><button class="btn gold" data-a="new">+ New sankalpa</button></div>
+        <div class="spread" style="border-bottom:1px solid var(--line);margin-bottom:12px"><h2 style="border:0;margin:0">In focus</h2><button class="btn sm" data-a="new">+ New sankalpa</button></div>
         ${act.length ? `<div class="grid">${act.slice(0, 3).map(card).join('')}</div>` : `<div class="card empty"><h3>Begin with one sankalpa</h3><p>A clear resolve, a felt vision, and the next small step.</p></div>`}
       </section>
     </div>`;
@@ -345,7 +428,7 @@ const views = {
     const list = S.goals.filter(g => (S.filter === 'all' || (S.filter === 'active') === !g.completed) && (S.area === 'all' || (g.area || 'dharma') === S.area));
     const chip = (k, v, label, c) => `<button class="chip ${S[k] === v ? 'on' : ''}" ${c ? `style="--ac:${c}"` : ''} data-a="set" data-k="${k}" data-v="${v}" aria-pressed="${S[k] === v}">${label}</button>`;
     return `<div class="stack">
-      <div class="spread"><div><p class="eyebrow">Sankalpas</p><h1>Your goals</h1></div><button class="btn gold" data-a="new">+ New sankalpa</button></div>
+      ${head('लक्ष्याणि', 'Lakṣyāṇi', 'Your goals, each with its vision and its next step', `<div class="begin"><button class="btn gold" data-a="new">+ New sankalpa</button></div>`)}
       <div class="stack" style="gap:10px">
         <div class="chips">${chip('filter', 'active', 'Active')}${chip('filter', 'done', 'Manifested')}${chip('filter', 'all', 'All')}</div>
         <div class="chips">${chip('area', 'all', 'All areas')}${Object.entries(AREAS).map(([k, a]) => chip('area', k, a.name, a.c)).join('')}</div>
@@ -361,7 +444,7 @@ const views = {
     const dots = (n, of) => `<div class="dots">${Array.from({ length: of }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`;
     const opts = sel => act.map(g => `<option value="${g.id}" ${g.id === sel ? 'selected' : ''}>${esc(g.title)}</option>`).join('');
     return `<div class="stack">
-      <div><p class="eyebrow">Practice</p><h1>Manifest</h1><p class="mute" style="max-width:560px;margin-top:6px">Feel it as done, say it as true, then act as the one who has it.</p></div>
+      ${head('भावना', 'Bhāvanā', 'Feel it as done, say it as true, then act as the one who has it')}
       <div class="pgrid">
         <section class="card pcard"><h3>Guided visualization</h3><p>Three slow breaths, then your vision read back to you line by line. About three minutes.</p>
           ${act.length ? `<select data-c="vizGoal" aria-label="Sankalpa to visualize">${opts(S.vizGoal)}</select><div><button class="btn gold" data-a="viz">Begin session</button> ${x.visualized ? '<span class="small" style="color:var(--green)">✓ done today</span>' : ''}</div>` : `<p>Create a sankalpa first.</p>`}
@@ -371,7 +454,7 @@ const views = {
         </section>
         <section class="card pcard"><h3>3 · 6 · 9 writing</h3><p>Write one affirmation 3 times in the morning, 6 in the afternoon, 9 at night.</p>
           ${g369 ? `<select data-c="s369goal" aria-label="Affirmation to write">${opts(g369.id)}</select>
-          <p class="quote" style="font-size:19px;color:var(--text)">“${esc(affOf(g369))}”</p>
+          <p class="quote" style="font-size:1.05rem;color:var(--ink)">“${esc(affOf(g369))}”</p>
           <div class="r369"><span>Morning</span>${dots(s.m || 0, 3)}<span>Afternoon</span>${dots(s.a || 0, 6)}<span>Night</span>${dots(s.n || 0, 9)}</div>
           ${total >= 18 ? `<p style="color:var(--green)">✓ Complete for today.</p>` : `<form class="inline" data-f="s369"><input type="text" name="t" placeholder="${phase} · write it out…" aria-label="Write the affirmation" autocomplete="off"><button class="btn">Write</button></form>`}` : `<p>Create a sankalpa first.</p>`}
         </section>
@@ -387,7 +470,7 @@ const views = {
   vision() {
     const list = [...S.goals].sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
     return `<div class="stack">
-      <div class="spread"><div><p class="eyebrow">See it</p><h1>Vision board</h1></div><button class="btn gold" data-a="stream" ${active().length ? '' : 'disabled'}>▶ Play slideshow</button></div>
+      ${head('दर्शनम्', 'Darśanam', 'Vision board', `<div class="begin"><button class="btn gold" data-a="stream" ${active().length ? '' : 'disabled'}>Play slideshow</button></div>`)}
       ${list.length ? `<div class="board">${list.map(g => { const im = bgImg(g.image); return `<div class="vt ${im ? 'img' : ''} ${g.completed ? 'done' : ''}" role="button" tabindex="0" data-a="open" data-id="${g.id}" style="--ac:${area(g).c};${im ? `background-image:${esc(im)}` : ''}"><span class="tag">${area(g).name}${g.completed ? ' · manifested' : ''}</span><p>${esc(affOf(g))}</p></div>`; }).join('')}</div><p class="small mute">Open a sankalpa and choose Edit to add a photo.</p>` : `<div class="card empty"><h3>Your board is empty</h3><p>Each sankalpa becomes a tile here.</p></div>`}
     </div>`;
   },
@@ -400,25 +483,28 @@ const views = {
     const beliefs = active().filter(g => g.belief).map(g => +g.belief);
     const upcoming = active().filter(g => g.due).slice(0, 6), won = S.goals.filter(g => g.completed);
     return `<div class="stack">
-      <div class="spread"><div><p class="eyebrow">Reflect</p><h1>Insights</h1></div><button class="btn" data-a="export">Export backup</button></div>
+      ${head('समीक्षा', 'Samīkṣā', 'Insights from your practice', `<div class="begin"><button class="btn" data-a="export">Export backup</button></div>`)}
       <section class="tiles">
         <div class="card tile"><b>${streak()}</b><span>day streak</span></div>
         <div class="card tile"><b>${last30.filter(Boolean).length}</b><span>practice days / last 30</span></div>
         <div class="card tile"><b>${beliefs.length ? (beliefs.reduce((a, b) => a + b, 0) / beliefs.length).toFixed(1) : '–'}</b><span>average belief / 10</span></div>
         <div class="card tile"><b>${dk.filter(k => (S.days[k].gratitude || []).some(Boolean)).length}</b><span>days of gratitude</span></div>
       </section>
-      <section class="card"><h3 style="margin-bottom:12px">Practice, last 18 weeks</h3><div class="heatwrap"><div class="heat">${cells}</div></div><p class="small mute" style="margin-top:10px">Brighter = more of the five daily practices completed.</p></section>
-      <section class="card"><h3 style="margin-bottom:8px">Balance across life</h3>
-        ${Object.entries(AREAS).map(([k, a]) => { const gs = S.goals.filter(g => (g.area || 'dharma') === k); const avg = gs.length ? Math.round(gs.reduce((s, g) => s + pct(g), 0) / gs.length) : 0; return `<div class="arow" style="--ac:${a.c}"><div><b style="color:${a.c}">${a.name}</b><div class="small mute">${a.hint}</div></div><div class="bar"><i style="width:${avg}%"></i></div><span class="mute" style="text-align:right">${gs.length ? `${gs.length} · ${avg}%` : '—'}</span></div>`; }).join('')}
+      <section class="card"><h4>Practice, last 18 weeks</h4><div class="heatwrap"><div class="heat">${cells}</div></div><p class="small mute" style="margin-top:10px;text-align:center">Deeper colour = more of the five daily practices completed.</p></section>
+      <section class="card"><h4>Balance across life</h4>
+        ${Object.entries(AREAS).map(([k, a]) => { const gs = S.goals.filter(g => (g.area || 'dharma') === k); const avg = gs.length ? Math.round(gs.reduce((s, g) => s + pct(g), 0) / gs.length) : 0; return `<div class="arow" style="--ac:${a.c}"><div><b>${a.name}</b><div class="small mute">${a.hint}</div></div><div class="bar"><i style="width:${avg}%"></i></div><span class="mute" style="text-align:right">${gs.length ? `${gs.length} · ${avg}%` : '—'}</span></div>`; }).join('')}
       </section>
       <div class="pgrid">
-        <section class="card"><h3>Coming due</h3>${upcoming.length ? `<ul class="list">${upcoming.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${dueText(g)}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">No dated sankalpas.</p>`}</section>
-        <section class="card"><h3>Manifested</h3>${won.length ? `<ul class="list">${won.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${g.completedAt ? fdate(g.completedAt, { day: 'numeric', month: 'short', year: 'numeric' }) : '✓'}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">Your first one is on its way.</p>`}</section>
+        <section class="card"><h4>Coming due</h4>${upcoming.length ? `<ul class="list">${upcoming.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${dueText(g)}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">No dated sankalpas.</p>`}</section>
+        <section class="card"><h4>Manifested</h4>${won.length ? `<ul class="list">${won.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${g.completedAt ? fdate(g.completedAt, { day: 'numeric', month: 'short', year: 'numeric' }) : '✓'}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">Your first one is on its way.</p>`}</section>
       </div>
     </div>`;
   }
 };
 
+function head(deva, iast, en, extra = '') {
+  return `<header><h1 class="deva-title" lang="sa">${deva}</h1><p class="iast-title">${iast}</p><p class="en-title">${en}</p>${extra}</header>`;
+}
 function gratInputs(x) {
   const g = x.gratitude || [];
   return `<div class="stack" style="gap:8px">${[0, 1, 2].map(i => `<input type="text" data-c="grat" data-i="${i}" value="${esc(g[i])}" placeholder="I am grateful for…" aria-label="Gratitude ${i + 1}">`).join('')}</div>`;
@@ -441,7 +527,7 @@ function detailHTML(g) {
   return `<div style="--ac:${a.c}">
     <div class="dhead ${im ? 'img' : ''}" ${im ? `style="background-image:${esc(im)}"` : ''}>
       <button class="x" data-a="close" aria-label="Close">×</button>
-      <span class="tag">${a.name} · ${a.hint}</span><h2>${esc(g.title)}</h2>
+      <span class="tag">${a.name} · ${a.hint}</span><p class="dtitle">${esc(g.title)}</p>
     </div>
     <div class="dbody">
       <div class="row" style="gap:18px">${ring(p, 76, 7)}
@@ -456,7 +542,7 @@ function detailHTML(g) {
         ${ms(g).map((m, i) => `<div class="row" style="flex-wrap:nowrap;align-items:flex-start"><button class="msline ${m.done ? 'on' : ''}" data-a="ms" data-id="${g.id}" data-i="${i}" aria-pressed="${!!m.done}"><span class="check ${m.done ? 'on' : ''}">✓</span><span style="overflow-wrap:anywhere">${esc(m.text)}</span></button><button class="del" data-a="msdel" data-i="${i}" aria-label="Remove step">×</button></div>`).join('')}
         <form class="inline" data-f="ms" style="margin-top:8px"><input type="text" name="t" placeholder="Add the next step…" aria-label="New step" autocomplete="off"><button class="btn sm">Add</button></form></div>
       ${g.obstacle || g.plan ? `<div class="two">${sec('Likely obstacle', g.obstacle)}${sec('If it shows up, I will…', g.plan)}</div>` : ''}
-      ${g.completed ? '' : `<div><h4>Belief — how real does it feel? <b style="color:var(--text)">${g.belief || 5}/10</b></h4><input type="range" min="1" max="10" value="${g.belief || 5}" data-c="belief" aria-label="Belief level"></div>`}
+      ${g.completed ? '' : `<div><h4>Belief — how real does it feel? <b style="color:var(--ink)">${g.belief || 5}/10</b></h4><input type="range" min="1" max="10" value="${g.belief || 5}" data-c="belief" aria-label="Belief level"></div>`}
       <div><h4>Journal</h4>
         <form class="inline" data-f="log"><select name="k" aria-label="Entry type"><option value="act">Action taken</option><option value="sign">Evidence / sign</option><option value="note">Note</option></select><input type="text" name="t" placeholder="What happened?" aria-label="Journal entry" autocomplete="off"><button class="btn sm">Log</button></form>
         ${log.length ? `<ul class="log" style="margin-top:12px">${log.map(l => { const k = LOGK[l.k] || LOGK.note; return `<li><time>${fdate(l.d)}</time><span style="overflow-wrap:anywhere"><b style="color:${k[1]}">${k[0]}</b>${esc(l.text)}</span></li>`; }).join('')}</ul>` : `<p class="small mute" style="margin-top:8px">Log actions you take and evidence you notice. Both build belief.</p>`}</div>
@@ -472,7 +558,7 @@ function openForm(id) {
   const f = (name, label, hint, el) => `<label class="f"><span><b>${label}</b>${hint ? ' — ' + hint : ''}</span>${el}</label>`;
   const d = $('#formDlg');
   d.innerHTML = `<form data-f="goal" method="dialog">
-    <div class="dhead"><button type="button" class="x" data-a="close" aria-label="Close">×</button><span class="tag">${id ? 'Refine' : 'New'} sankalpa</span><h2>${id ? 'Edit your resolve' : 'What are you calling in?'}</h2></div>
+    <div class="dhead"><button type="button" class="x" data-a="close" aria-label="Close">×</button><span class="tag">${id ? 'Refine' : 'New'} sankalpa</span><p class="dtitle">${id ? 'Edit your resolve' : 'What are you calling in?'}</p></div>
     <div class="dbody" style="gap:16px">
       ${f('title', 'The goal', 'specific, in your words', `<div class="inline"><input type="text" name="title" required maxlength="160" value="${esc(g.title)}" placeholder="e.g. Publish the translation by March"><button type="button" class="btn sm" id="micBtn" hidden>🎙 Speak</button></div>`)}
       <div class="f"><span><b>Area of life</b></span><div class="chips">${Object.entries(AREAS).map(([k, a]) => `<label class="chip" style="--ac:${a.c}" title="${a.hint}"><input type="radio" name="area" value="${k}" ${(g.area || 'dharma') === k ? 'checked' : ''}>${a.name}</label>`).join('')}</div></div>
@@ -511,7 +597,7 @@ function play(steps, onDone) {
   if (run) clearTimeout(run.timer);
   run = { steps, i: -1, onDone, timer: null };
   const st = $('#stage'); st.hidden = false;
-  st.innerHTML = `<div class="s-top"><button class="btn sm" data-a="mute">${S.muted ? '🔇 Voice off' : '🔊 Voice on'}</button><button class="btn sm" data-a="stop" aria-label="End session">× End</button></div><div class="orb idle"></div><p class="s-sub"></p><h2 class="s-main" aria-live="polite"></h2><button class="btn sm ghost s-next" data-a="snext">Next ›</button><div class="s-prog"><i></i></div>`;
+  st.innerHTML = `<div class="s-top"><button class="btn sm" data-a="mute">${S.muted ? '🔇 Voice off' : '🔊 Voice on'}</button><button class="btn sm" data-a="stop" aria-label="End session">× End</button></div><div class="orb idle"></div><p class="s-sub"></p><p class="s-main" aria-live="polite"></p><button class="btn sm ghost s-next" data-a="snext">Next ›</button><div class="s-prog"><i></i></div>`;
   advance();
 }
 function advance() {
@@ -553,7 +639,7 @@ function startStream() {
 }
 function confetti() {
   const c = $('#confetti'), x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
-  const cols = ['#f6c453', '#ff9a3c', '#f472b6', '#a78bfa', '#34d399'];
+  const cols = ['#9a4a1c', '#e09a6a', '#c4567a', '#b08a1e', '#2f8f6b'];
   const P = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight * .4, vx: (Math.random() - .5) * 16, vy: Math.random() * -15 - 3, s: Math.random() * 7 + 3, c: cols[Math.random() * 5 | 0], r: Math.random() * 6 }));
   let t = 0; (function f() { x.clearRect(0, 0, c.width, c.height); for (const p of P) { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += .2; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .6); x.restore(); } if (++t < 150) requestAnimationFrame(f); else x.clearRect(0, 0, c.width, c.height); })();
 }
@@ -649,8 +735,27 @@ document.addEventListener('submit', e => { const f = e.target.dataset.f; if (f) 
 const route = () => { const t = location.hash.slice(1); S.tab = views[t] ? t : 'today'; paint(); scrollTo(0, 0); };
 addEventListener('hashchange', route);
 
+/* ---------- theme switch + toolbar, as in the Granthālaya ---------- */
+const root = document.documentElement, darkMq = matchMedia('(prefers-color-scheme: dark)');
+const mode = () => root.getAttribute('data-theme') || (darkMq.matches ? 'dark' : 'light');
+function paintTheme() {
+  const m = mode(), label = m === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  document.querySelectorAll('[data-theme-toggle]').forEach(b => { b.setAttribute('data-mode', m); b.setAttribute('aria-label', label); b.title = label; });
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-theme-toggle]')) return;
+  const next = mode() === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('vs-theme', next); } catch (err) {}
+  paintTheme();
+});
+darkMq.addEventListener?.('change', paintTheme);
+paintTheme();
+const onScroll = () => $('#topbar').classList.toggle('scrolled', scrollY > 4);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
 /* ---------- live data ---------- */
-if (TEST) $('#testBadge').innerHTML = '<em>TEST DATA</em>';
+if (TEST) $('#testBadge').innerHTML = '<span class="test-tag">Test data</span>';
 route();
 onSnapshot(query(collection(db, GOALS), orderBy('createdAt', 'desc')), snap => {
   S.goals = snap.docs.map(d => ({ ...d.data(), id: d.id })); S.loaded = true; S.error = ''; render();

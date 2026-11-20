@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0b16">
+<title>Sankalpa · Vedic Space Goals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b16; --bg2:#0f1126; --card:#14172e; --card2:#1b1f3d; --line:#272c50;
+  --text:#eef0ff; --mute:#9aa0c7; --gold:#f6c453; --saffron:#ff9a3c; --green:#34d399; --red:#f87171;
+  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark}
+body{font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--text);min-height:100dvh;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(246,196,83,.10),transparent 60%),
+             radial-gradient(700px 500px at -10% 30%,rgba(139,124,246,.12),transparent 60%),var(--bg);
+  background-attachment:fixed}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(34px,6vw,48px)} h2{font-size:26px} h3{font-size:21px}
+
+/* layout */
+.app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100dvh}
+.rail{position:sticky;top:0;height:100dvh;padding:26px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:28px;background:rgba(10,11,22,.6);backdrop-filter:blur(10px)}
+.brand b{font-family:var(--serif);font-size:28px;font-weight:600;background:linear-gradient(90deg,var(--gold),var(--saffron));-webkit-background-clip:text;background-clip:text;color:transparent;display:block;line-height:1}
+.brand small{color:var(--mute);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.brand em{display:inline-block;margin-top:6px;font-style:normal;font-size:10px;font-weight:600;letter-spacing:.1em;padding:2px 8px;border-radius:99px;background:var(--red);color:#200}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;color:var(--mute);font-weight:500}
+.nav a:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav a.on{color:var(--gold);background:rgba(246,196,83,.10)}
+.nav svg{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+main{padding:36px clamp(16px,4vw,48px) 80px;max-width:1040px;width:100%}
+@media(max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:fixed;inset:auto 0 0 0;top:auto;height:auto;z-index:20;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:none;border-top:1px solid var(--line);background:rgba(10,11,22,.92)}
+  .brand{display:none}
+  .nav{flex-direction:row;flex:1;gap:0}
+  .nav a{flex:1;flex-direction:column;gap:2px;font-size:11px;padding:6px 2px;justify-content:center}
+  main{padding:22px 16px 110px}
+}
+
+/* primitives */
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.mute{color:var(--mute)} .small{font-size:13px}
+.card{background:linear-gradient(180deg,var(--card),rgba(20,23,46,.75));border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.stack{display:flex;flex-direction:column;gap:20px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 18px;border-radius:99px;font-weight:600;font-size:14px;background:var(--card2);border:1px solid var(--line);transition:transform .1s,background .15s,border-color .15s}
+.btn:hover{border-color:#3d4478} .btn:active{transform:scale(.97)}
+.btn.gold{background:linear-gradient(90deg,var(--gold),var(--saffron));color:#241500;border-color:transparent}
+.btn.ghost{background:transparent} .btn.sm{min-height:32px;padding:4px 12px;font-size:13px}
+.btn.danger{color:var(--red);border-color:rgba(248,113,113,.4);background:transparent}
+.btn[disabled]{opacity:.4;pointer-events:none}
+input[type=text],input[type=date],input[type=url],textarea,select{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:72px}
+::placeholder{color:#6a7099}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--mute)}
+label.f>span b{color:var(--text);font-weight:600}
+.chip{display:inline-flex;align-items:center;min-height:32px;padding:4px 14px;border-radius:99px;border:1px solid var(--line);font-size:13px;font-weight:500;color:var(--mute);background:transparent;cursor:pointer;white-space:nowrap}
+.chip.on,.chip:has(input:checked){color:var(--ac,var(--gold));border-color:var(--ac,var(--gold));background:color-mix(in srgb,var(--ac,var(--gold)) 12%,transparent)}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ac,var(--gold))}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--ac,var(--gold));transition:width .4s}
+.ring text{fill:var(--text);font:600 14px var(--sans)}
+.empty{text-align:center;padding:44px 20px;color:var(--mute)}
+.empty h3{color:var(--text);margin-bottom:6px}
+
+/* today */
+.hero blockquote{margin-top:14px;padding-left:14px;border-left:2px solid var(--gold);color:var(--mute);max-width:560px}
+.hero blockquote span{display:block;font-size:19px;color:var(--text);line-height:1.6}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{padding:16px}
+.tile b{display:block;font-size:30px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile span{font-size:12px;color:var(--mute);letter-spacing:.04em}
+@media(max-width:620px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ritual{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+@media(max-width:620px){.ritual{grid-template-columns:minmax(0,1fr)}}
+.steps{list-style:none;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:none;padding-bottom:0} .steps li:first-child{padding-top:0}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--mute);flex:none}
+.done>.dot,.dot.done{background:var(--green);border-color:var(--green);color:#03281b}
+.steps h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.steps .body{display:flex;flex-direction:column;gap:8px}
+.check{width:24px;height:24px;border-radius:8px;border:2px solid #3d4478;flex:none;display:grid;place-items:center;font-size:13px;font-weight:700;color:transparent}
+.check.on{background:var(--green);border-color:var(--green);color:#03281b}
+.msline{display:flex;align-items:flex-start;gap:10px;text-align:left;width:100%;padding:6px 0}
+.msline.on span:last-child{text-decoration:line-through;color:var(--mute)}
+
+/* goals */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.gcard{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(180deg,var(--card),rgba(20,23,46,.7));cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,border-color .15s}
+.gcard::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--ac)}
+.gcard:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 55%,var(--line))}
+.gcard.done{opacity:.72}
+.gcard h3{overflow-wrap:anywhere}
+.gcard .aff{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gfoot{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--mute)}
+.gfoot span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+
+/* dialogs */
+dialog{border:1px solid var(--line);padding:0;background:var(--card);color:var(--text);border-radius:22px;width:min(700px,calc(100vw - 20px));max-height:calc(100dvh - 20px);margin:auto;overflow:auto}
+dialog::backdrop{background:rgba(4,5,14,.72);backdrop-filter:blur(5px)}
+.dhead{position:relative;padding:26px 24px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac,var(--gold)) 30%,var(--card)),var(--card) 75%);background-size:cover;background-position:center}
+.dhead.img{min-height:210px;display:flex;flex-direction:column;justify-content:flex-end}
+.dhead.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,22,.15),rgba(10,11,22,.92))}
+.dhead>*{position:relative;z-index:1}
+.dhead h2{font-size:30px;overflow-wrap:anywhere;margin-top:4px;padding-right:36px}
+.x{position:absolute!important;top:14px;right:14px;z-index:2!important;width:36px;height:36px;border-radius:50%;background:rgba(10,11,22,.6);font-size:20px;line-height:1}
+.dbody{padding:22px 24px 26px;display:flex;flex-direction:column;gap:22px}
+.dbody h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px;font-weight:600}
+.quote{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.35}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:560px){.two{grid-template-columns:minmax(0,1fr)}}
+.del{width:28px;height:28px;border-radius:8px;color:var(--mute);flex:none} .del:hover{color:var(--red);background:rgba(248,113,113,.1)}
+.inline{display:flex;gap:8px} .inline input{flex:1;min-width:0} .inline select{width:auto;flex:none}
+.log{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.log li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px}
+.log time{color:var(--mute);font-size:12px;padding-top:2px}
+.log b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.thumb{width:64px;height:64px;border-radius:12px;background:var(--bg2) center/cover;border:1px solid var(--line);flex:none}
+
+/* manifest */
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:720px){.pgrid{grid-template-columns:minmax(0,1fr)}}
+.pcard{display:flex;flex-direction:column;gap:12px}
+.pcard p{color:var(--mute);font-size:14px}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid #3d4478}
+.dots i.on{background:var(--gold);border-color:var(--gold)}
+.r369{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 12px;align-items:center;font-size:13px;color:var(--mute)}
+
+/* vision */
+.board{columns:3 240px;column-gap:14px}
+.vt{break-inside:avoid;margin-bottom:14px;border-radius:var(--r);overflow:hidden;position:relative;min-height:190px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;cursor:pointer;border:1px solid var(--line);background:linear-gradient(150deg,color-mix(in srgb,var(--ac) 42%,#0d0f22),#0d0f22 80%) center/cover}
+.vt.img{min-height:280px}
+.vt.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,11,22,.9))}
+.vt>*{position:relative;z-index:1}
+.vt p{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.3;margin-top:4px;overflow-wrap:anywhere}
+.vt.done{filter:saturate(.5)}
+
+/* insights */
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;width:max-content;max-width:100%}
+.heat i{width:14px;height:14px;border-radius:4px;background:var(--line)}
+.heat i[data-l="1"]{background:#5b4a1c}.heat i[data-l="2"]{background:#8a6c22}.heat i[data-l="3"]{background:#b88c2a}.heat i[data-l="4"]{background:#dca93a}.heat i[data-l="5"]{background:var(--gold)}
+.heat i.fut{opacity:.25}
+.heatwrap{overflow-x:auto;padding-bottom:4px}
+.arow{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:13px;padding:7px 0}
+.list{list-style:none} .list li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)} .list li:last-child{border:none}
+.list button{text-align:left;overflow-wrap:anywhere}
+
+/* session stage */
+#stage{position:fixed;inset:0;z-index:100;background:#05060f center/cover;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 24px;text-align:center}
+#stage[hidden]{display:none}
+#stage::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(5,6,15,.55),rgba(5,6,15,.94))}
+#stage>*{position:relative}
+.orb{width:150px;height:150px;border-radius:50%;margin-bottom:44px;background:radial-gradient(circle at 35% 30%,#ffe6a8,var(--gold) 45%,var(--saffron) 100%);box-shadow:0 0 80px rgba(246,196,83,.5);transform:scale(.7);opacity:.85;transition:transform 4s ease-in-out,opacity 4s}
+.orb.in,.orb.hold{transform:scale(1.15);opacity:1} .orb.out{transform:scale(.6);opacity:.7;transition-duration:6s}
+.orb.idle{animation:pulse 7s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(.9);opacity:1}}
+#stage .s-sub{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;min-height:20px}
+#stage .s-main{font-family:var(--serif);font-size:clamp(28px,5.4vw,50px);line-height:1.25;max-width:880px;margin-top:14px;animation:fade 1.2s ease;overflow-wrap:anywhere}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+.s-top{position:absolute!important;top:16px;right:16px;display:flex;gap:8px}
+.s-prog{position:absolute!important;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08)}
+.s-prog i{display:block;height:100%;background:var(--gold);transition:width .5s}
+.s-next{position:absolute!important;bottom:28px}
+
+#toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:var(--card2);border:1px solid var(--line);padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:150}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand"><b>Sankalpa</b><small>Vedic Space Goals</small><span id="testBadge"></span></div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>Today</a>
+      <a href="#goals"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Goals</a>
+      <a href="#manifest"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></svg>Manifest</a>
+      <a href="#vision"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>Vision</a>
+      <a href="#insights"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Insights</a>
+    </nav>
+  </aside>
+  <main id="view"></main>
+</div>
+<dialog id="formDlg" aria-label="Sankalpa form"></dialog>
+<dialog id="detailDlg" aria-label="Sankalpa details"></dialog>
+<div id="stage" hidden></div>
+<div id="toast" role="status"></div>
+<canvas id="confetti"></canvas>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, addDoc, setDoc, onSnapshot, updateDoc, doc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+/* ---------- database (same Firebase project + "goals" collection as before) ---------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDNODSDmwHVfqt2CSb0tPDZwJGYjov7Lt0",
+  authDomain: "vedic-space.firebaseapp.com",
+  projectId: "vedic-space",
+  storageBucket: "vedic-space.firebasestorage.app",
+  messagingSenderId: "465492860613",
+  appId: "1:465492860613:web:701d9c3ab0cd4c5a3edaac"
+};
+const app = initializeApp(firebaseConfig);
+let db;
+try { db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); }
+catch (e) { db = getFirestore(app); }
+// index.html?db=test uses separate collections so you can experiment without touching real goals.
+const TEST = new URLSearchParams(location.search).get('db') === 'test';
+const GOALS = TEST ? 'goals_test' : 'goals';
+const DAYS = TEST ? 'goal_rituals_test' : 'goal_rituals';
+
+/* ---------- constants ---------- */
+const AREAS = {
+  dharma: { name: 'Dharma', hint: 'Purpose & service', c: '#f6c453' },
+  artha:  { name: 'Artha',  hint: 'Wealth & work',     c: '#34d399' },
+  kama:   { name: 'Kama',   hint: 'Love & joy',        c: '#f472b6' },
+  moksha: { name: 'Moksha', hint: 'Spirit & freedom',  c: '#a78bfa' },
+  arogya: { name: 'Arogya', hint: 'Health & vitality', c: '#38bdf8' },
+  vidya:  { name: 'Vidya',  hint: 'Learning & craft',  c: '#fb923c' }
+};
+const SUTRAS = [
+  ['उद्यमेन हि सिध्यन्ति कार्याणि न मनोरथैः', 'Works are accomplished by effort, not by wishing alone.'],
+  ['यद्भावं तद्भवति', 'As is your feeling, so you become.'],
+  ['मन एव मनुष्याणां कारणं बन्धमोक्षयोः', 'The mind alone is the cause of bondage and of freedom.'],
+  ['योगः कर्मसु कौशलम्', 'Yoga is skill in action.'],
+  ['उद्धरेदात्मनात्मानम्', 'Lift yourself by your own self.'],
+  ['श्रद्धावान् लभते ज्ञानम्', 'The one who has faith attains knowledge.']
+];
+const LOGK = { act: ['Action', 'var(--green)'], sign: ['Evidence', 'var(--gold)'], note: ['Note', 'var(--mute)'], viz: ['Visualized', '#a78bfa'] };
+
+/* ---------- state + helpers ---------- */
+const S = { goals: [], days: {}, loaded: false, error: '', tab: 'today', filter: 'active', area: 'all', detailId: null, editId: null, formImage: '', vizGoal: '', muted: false, refocus: null };
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const dkey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const today = () => dkey(new Date());
+const pdate = k => new Date(k + 'T00:00');
+const fdate = (k, o = { day: 'numeric', month: 'short' }) => k ? pdate(k).toLocaleDateString(undefined, o) : '';
+const byId = id => S.goals.find(g => g.id === id);
+const area = g => AREAS[g.area] || AREAS.dharma;
+const ms = g => Array.isArray(g.milestones) ? g.milestones : [];
+const pct = g => g.completed ? 100 : ms(g).length ? Math.round(ms(g).filter(m => m.done).length / ms(g).length * 100) : 0;
+const nextStep = g => { const i = ms(g).findIndex(m => !m.done); return i < 0 ? null : { i, text: ms(g)[i].text }; };
+const active = () => S.goals.filter(g => !g.completed).sort((a, b) => (b.focus ? 1 : 0) - (a.focus ? 1 : 0) || (a.due || '9999').localeCompare(b.due || '9999'));
+const affOf = g => (g.affirmation || '').trim() || g.title;
+function dueText(g) {
+  if (!g.due || g.completed) return '';
+  const n = Math.round((pdate(g.due) - pdate(today())) / 864e5);
+  return n < 0 ? `${-n}d overdue` : n === 0 ? 'Due today' : n === 1 ? 'Due tomorrow' : `${n} days left`;
+}
+function bgImg(u) {
+  if (!u) return '';
+  if (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(u)) return `url(${u})`;
+  if (/^https:\/\/[^\s'"()\\<>]+$/.test(u)) return `url('${u}')`;
+  return '';
+}
+function ring(p, size = 64, sw = 6, label = p + '%') {
+  const r = (size - sw) / 2, c = 2 * Math.PI * r, h = size / 2;
+  return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(label)}"><circle cx="${h}" cy="${h}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${sw}"/><circle cx="${h}" cy="${h}" r="${r}" fill="none" stroke="var(--ac,var(--gold))" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}" transform="rotate(-90 ${h} ${h})"/><text x="50%" y="50%" dy=".35em" text-anchor="middle">${esc(label)}</text></svg>`;
+}
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2800); }
+const fail = e => { console.error(e); toast('Could not save — ' + (e.code || e.message || 'check connection')); };
+
+/* ---------- writes ---------- */
+const saveGoal = (id, patch) => updateDoc(doc(db, GOALS, id), patch).catch(fail);
+const saveDay = (patch, d = today()) => setDoc(doc(db, DAYS, d), { date: d, ...patch, updatedAt: serverTimestamp() }, { merge: true }).catch(fail);
+const addLog = (g, k, text = '') => saveGoal(g.id, { log: [...(g.log || []), { d: today(), k, text }].slice(-300) });
+
+/* ---------- daily ritual maths ---------- */
+const day = (d = today()) => S.days[d] || {};
+const n369 = x => { const s = x.s369 || {}; return (s.m || 0) + (s.a || 0) + (s.n || 0); };
+const actedOn = d => S.goals.some(g => g.completedAt === d || (g.log || []).some(l => l.d === d && l.k === 'act') || ms(g).some(m => m.doneAt === d));
+function parts(d = today()) {
+  const x = day(d);
+  return { intention: !!(x.intention || '').trim(), visualize: !!x.visualized, affirm: !!x.affirmed || n369(x) > 0, act: actedOn(d), gratitude: (x.gratitude || []).some(t => t && t.trim()) };
+}
+const score = d => Object.values(parts(d)).filter(Boolean).length;
+function streak() {
+  let n = 0; const d = new Date();
+  if (!score(dkey(d))) d.setDate(d.getDate() - 1);
+  while (score(dkey(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+/* ---------- views ---------- */
+const views = {
+  today() {
+    const now = new Date(), h = now.getHours(), x = day(), p = parts(), done = score(today());
+    const sutra = SUTRAS[Math.floor(now / 864e5) % SUTRAS.length];
+    const act = active(), g = act[0], ns = g && nextStep(g);
+    const allMs = S.goals.flatMap(ms);
+    const step = (ok, n, title, body) => `<li class="${ok ? 'done' : ''}"><span class="dot">${ok ? '✓' : n}</span><div class="body"><div><h4>${title}</h4></div>${body}</div></li>`;
+    return `<div class="stack">
+      <header class="hero">
+        <p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+        <h1>${h < 5 ? 'The quiet hours.' : h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Good evening.'}</h1>
+        <blockquote><span lang="sa">${sutra[0]}</span>${sutra[1]}</blockquote>
+      </header>
+      <section class="tiles">
+        <div class="card tile"><b>${streak()}</b><span>day streak</span></div>
+        <div class="card tile"><b>${act.length}</b><span>active sankalpa${act.length === 1 ? '' : 's'}</span></div>
+        <div class="card tile"><b>${allMs.filter(m => m.done).length}<small class="mute" style="font-size:18px"> / ${allMs.length}</small></b><span>steps completed</span></div>
+        <div class="card tile"><b>${S.goals.filter(g => g.completed).length}</b><span>manifested</span></div>
+      </section>
+      <section class="card ritual">
+        <div style="--ac:var(--gold);text-align:center">${ring(done * 20, 96, 8, done + '/5')}<p class="small mute" style="margin-top:6px">Today's ritual</p></div>
+        <ol class="steps">
+          ${step(p.intention, 1, 'Set your intention', `<input type="text" data-c="intention" value="${esc(x.intention)}" placeholder="Today I will…" aria-label="Today's intention">`)}
+          ${step(p.visualize, 2, 'Visualize it done', g ? `<div class="row"><button class="btn sm" data-a="viz" data-id="${g.id}">Begin · ${esc(g.title.slice(0, 40))}${g.title.length > 40 ? '…' : ''}</button></div>` : `<p class="small mute">Create a sankalpa to visualize.</p>`)}
+          ${step(p.affirm, 3, 'Affirm', `<div class="row"><button class="btn sm" data-a="stream">Play affirmations</button><a class="btn sm ghost" href="#manifest">3 · 6 · 9 writing</a></div>`)}
+          ${step(p.act, 4, 'Take one real step', g ? (ns ? `<button class="msline" data-a="ms" data-id="${g.id}" data-i="${ns.i}"><span class="check">✓</span><span>${esc(ns.text)} <span class="mute small">— ${esc(g.title)}</span></span></button>` : `<div class="row"><button class="btn sm" data-a="open" data-id="${g.id}">Log an action on “${esc(g.title.slice(0, 30))}”</button></div>`) : `<p class="small mute">Nothing active yet.</p>`)}
+          ${step(p.gratitude, 5, 'Give thanks', gratInputs(x))}
+        </ol>
+      </section>
+      <section>
+        <div class="spread" style="margin-bottom:12px"><h2>In focus</h2><button class="btn gold" data-a="new">+ New sankalpa</button></div>
+        ${act.length ? `<div class="grid">${act.slice(0, 3).map(card).join('')}</div>` : `<div class="card empty"><h3>Begin with one sankalpa</h3><p>A clear resolve, a felt vision, and the next small step.</p></div>`}
+      </section>
+    </div>`;
+  },
+
+  goals() {
+    const list = S.goals.filter(g => (S.filter === 'all' || (S.filter === 'active') === !g.completed) && (S.area === 'all' || (g.area || 'dharma') === S.area));
+    const chip = (k, v, label, c) => `<button class="chip ${S[k] === v ? 'on' : ''}" ${c ? `style="--ac:${c}"` : ''} data-a="set" data-k="${k}" data-v="${v}" aria-pressed="${S[k] === v}">${label}</button>`;
+    return `<div class="stack">
+      <div class="spread"><div><p class="eyebrow">Sankalpas</p><h1>Your goals</h1></div><button class="btn gold" data-a="new">+ New sankalpa</button></div>
+      <div class="stack" style="gap:10px">
+        <div class="chips">${chip('filter', 'active', 'Active')}${chip('filter', 'done', 'Manifested')}${chip('filter', 'all', 'All')}</div>
+        <div class="chips">${chip('area', 'all', 'All areas')}${Object.entries(AREAS).map(([k, a]) => chip('area', k, a.name, a.c)).join('')}</div>
+      </div>
+      ${list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="card empty"><h3>Nothing here yet</h3><p>${S.goals.length ? 'No sankalpas match this filter.' : 'Write your first sankalpa to begin.'}</p></div>`}
+    </div>`;
+  },
+
+  manifest() {
+    const act = active(), x = day(), s = x.s369 || {};
+    const g369 = byId(s.goalId) || act[0];
+    const total = n369(x), phase = (s.m || 0) < 3 ? 'Morning' : (s.a || 0) < 6 ? 'Afternoon' : 'Night';
+    const dots = (n, of) => `<div class="dots">${Array.from({ length: of }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`;
+    const opts = sel => act.map(g => `<option value="${g.id}" ${g.id === sel ? 'selected' : ''}>${esc(g.title)}</option>`).join('');
+    return `<div class="stack">
+      <div><p class="eyebrow">Practice</p><h1>Manifest</h1><p class="mute" style="max-width:560px;margin-top:6px">Feel it as done, say it as true, then act as the one who has it.</p></div>
+      <div class="pgrid">
+        <section class="card pcard"><h3>Guided visualization</h3><p>Three slow breaths, then your vision read back to you line by line. About three minutes.</p>
+          ${act.length ? `<select data-c="vizGoal" aria-label="Sankalpa to visualize">${opts(S.vizGoal)}</select><div><button class="btn gold" data-a="viz">Begin session</button> ${x.visualized ? '<span class="small" style="color:var(--green)">✓ done today</span>' : ''}</div>` : `<p>Create a sankalpa first.</p>`}
+        </section>
+        <section class="card pcard"><h3>Affirmation stream</h3><p>Every active affirmation, full screen, spoken aloud. Let each one land before the next.</p>
+          <div><button class="btn gold" data-a="stream" ${act.length ? '' : 'disabled'}>Play ${act.length} affirmation${act.length === 1 ? '' : 's'}</button> ${x.affirmed ? '<span class="small" style="color:var(--green)">✓ done today</span>' : ''}</div>
+        </section>
+        <section class="card pcard"><h3>3 · 6 · 9 writing</h3><p>Write one affirmation 3 times in the morning, 6 in the afternoon, 9 at night.</p>
+          ${g369 ? `<select data-c="s369goal" aria-label="Affirmation to write">${opts(g369.id)}</select>
+          <p class="quote" style="font-size:19px;color:var(--text)">“${esc(affOf(g369))}”</p>
+          <div class="r369"><span>Morning</span>${dots(s.m || 0, 3)}<span>Afternoon</span>${dots(s.a || 0, 6)}<span>Night</span>${dots(s.n || 0, 9)}</div>
+          ${total >= 18 ? `<p style="color:var(--green)">✓ Complete for today.</p>` : `<form class="inline" data-f="s369"><input type="text" name="t" placeholder="${phase} · write it out…" aria-label="Write the affirmation" autocomplete="off"><button class="btn">Write</button></form>`}` : `<p>Create a sankalpa first.</p>`}
+        </section>
+        <section class="card pcard"><h3>Gratitude</h3><p>Three things, already here.</p>${gratInputs(x)}</section>
+        <section class="card pcard"><h3>Scripting</h3><p>Describe a day in the life where it has already happened — present tense, with detail.</p>
+          <textarea rows="6" data-c="script" placeholder="I wake up and…" aria-label="Scripting">${esc(x.script)}</textarea></section>
+        <section class="card pcard"><h3>Evening reflection</h3><p>What moved today? One win, one sign, however small.</p>
+          <textarea rows="6" data-c="win" placeholder="Today I noticed…" aria-label="Evening reflection">${esc(x.win)}</textarea></section>
+      </div>
+    </div>`;
+  },
+
+  vision() {
+    const list = [...S.goals].sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
+    return `<div class="stack">
+      <div class="spread"><div><p class="eyebrow">See it</p><h1>Vision board</h1></div><button class="btn gold" data-a="stream" ${active().length ? '' : 'disabled'}>▶ Play slideshow</button></div>
+      ${list.length ? `<div class="board">${list.map(g => { const im = bgImg(g.image); return `<div class="vt ${im ? 'img' : ''} ${g.completed ? 'done' : ''}" role="button" tabindex="0" data-a="open" data-id="${g.id}" style="--ac:${area(g).c};${im ? `background-image:${esc(im)}` : ''}"><span class="tag">${area(g).name}${g.completed ? ' · manifested' : ''}</span><p>${esc(affOf(g))}</p></div>`; }).join('')}</div><p class="small mute">Open a sankalpa and choose Edit to add a photo.</p>` : `<div class="card empty"><h3>Your board is empty</h3><p>Each sankalpa becomes a tile here.</p></div>`}
+    </div>`;
+  },
+
+  insights() {
+    const start = new Date(); start.setDate(start.getDate() - start.getDay() - 7 * 17);
+    const tk = today(); let cells = '';
+    for (let i = 0; i < 7 * 18; i++) { const d = new Date(start); d.setDate(start.getDate() + i); const k = dkey(d), sc = k > tk ? 0 : score(k); cells += `<i data-l="${sc}" class="${k > tk ? 'fut' : ''}" title="${fdate(k)} · ${sc}/5"></i>`; }
+    const dk = Object.keys(S.days), last30 = Array.from({ length: 30 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - i); return score(dkey(d)); });
+    const beliefs = active().filter(g => g.belief).map(g => +g.belief);
+    const upcoming = active().filter(g => g.due).slice(0, 6), won = S.goals.filter(g => g.completed);
+    return `<div class="stack">
+      <div class="spread"><div><p class="eyebrow">Reflect</p><h1>Insights</h1></div><button class="btn" data-a="export">Export backup</button></div>
+      <section class="tiles">
+        <div class="card tile"><b>${streak()}</b><span>day streak</span></div>
+        <div class="card tile"><b>${last30.filter(Boolean).length}</b><span>practice days / last 30</span></div>
+        <div class="card tile"><b>${beliefs.length ? (beliefs.reduce((a, b) => a + b, 0) / beliefs.length).toFixed(1) : '–'}</b><span>average belief / 10</span></div>
+        <div class="card tile"><b>${dk.filter(k => (S.days[k].gratitude || []).some(Boolean)).length}</b><span>days of gratitude</span></div>
+      </section>
+      <section class="card"><h3 style="margin-bottom:12px">Practice, last 18 weeks</h3><div class="heatwrap"><div class="heat">${cells}</div></div><p class="small mute" style="margin-top:10px">Brighter = more of the five daily practices completed.</p></section>
+      <section class="card"><h3 style="margin-bottom:8px">Balance across life</h3>
+        ${Object.entries(AREAS).map(([k, a]) => { const gs = S.goals.filter(g => (g.area || 'dharma') === k); const avg = gs.length ? Math.round(gs.reduce((s, g) => s + pct(g), 0) / gs.length) : 0; return `<div class="arow" style="--ac:${a.c}"><div><b style="color:${a.c}">${a.name}</b><div class="small mute">${a.hint}</div></div><div class="bar"><i style="width:${avg}%"></i></div><span class="mute" style="text-align:right">${gs.length ? `${gs.length} · ${avg}%` : '—'}</span></div>`; }).join('')}
+      </section>
+      <div class="pgrid">
+        <section class="card"><h3>Coming due</h3>${upcoming.length ? `<ul class="list">${upcoming.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${dueText(g)}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">No dated sankalpas.</p>`}</section>
+        <section class="card"><h3>Manifested</h3>${won.length ? `<ul class="list">${won.map(g => `<li><button data-a="open" data-id="${g.id}">${esc(g.title)}</button><span class="small mute" style="white-space:nowrap">${g.completedAt ? fdate(g.completedAt, { day: 'numeric', month: 'short', year: 'numeric' }) : '✓'}</span></li>`).join('')}</ul>` : `<p class="mute small" style="margin-top:8px">Your first one is on its way.</p>`}</section>
+      </div>
+    </div>`;
+  }
+};
+
+function gratInputs(x) {
+  const g = x.gratitude || [];
+  return `<div class="stack" style="gap:8px">${[0, 1, 2].map(i => `<input type="text" data-c="grat" data-i="${i}" value="${esc(g[i])}" placeholder="I am grateful for…" aria-label="Gratitude ${i + 1}">`).join('')}</div>`;
+}
+function card(g) {
+  const a = area(g), n = ms(g), ns = nextStep(g), p = pct(g);
+  return `<div class="gcard ${g.completed ? 'done' : ''}" role="button" tabindex="0" data-a="open" data-id="${g.id}" style="--ac:${a.c}">
+    <div class="spread"><span class="tag">${a.name}${g.focus && !g.completed ? ' · ★ focus' : ''}</span><span class="small mute">${g.completed ? '✓ Manifested' : dueText(g)}</span></div>
+    <h3>${esc(g.title)}</h3>
+    ${g.affirmation ? `<p class="aff">“${esc(g.affirmation)}”</p>` : ''}
+    <div class="bar"><i style="width:${p}%"></i></div>
+    <div class="gfoot"><span>${n.length ? `${n.filter(m => m.done).length}/${n.length} steps` : p + '%'}</span><span>${!g.completed && ns ? 'Next: ' + esc(ns.text) : ''}</span></div>
+  </div>`;
+}
+
+/* ---------- detail dialog ---------- */
+function detailHTML(g) {
+  const a = area(g), im = bgImg(g.image), p = pct(g), log = [...(g.log || [])].reverse().slice(0, 20);
+  const sec = (t, v) => v ? `<div><h4>${t}</h4><p style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(v)}</p></div>` : '';
+  return `<div style="--ac:${a.c}">
+    <div class="dhead ${im ? 'img' : ''}" ${im ? `style="background-image:${esc(im)}"` : ''}>
+      <button class="x" data-a="close" aria-label="Close">×</button>
+      <span class="tag">${a.name} · ${a.hint}</span><h2>${esc(g.title)}</h2>
+    </div>
+    <div class="dbody">
+      <div class="row" style="gap:18px">${ring(p, 76, 7)}
+        <div style="flex:1;min-width:180px"><p>${g.completed ? `<b style="color:var(--green)">Manifested</b>${g.completedAt ? ' · ' + fdate(g.completedAt, { day: 'numeric', month: 'long', year: 'numeric' }) : ''}` : (dueText(g) || 'No target date')}${g.due && !g.completed ? ` <span class="mute">· ${fdate(g.due, { day: 'numeric', month: 'long', year: 'numeric' })}</span>` : ''}</p>
+          <div class="row" style="margin-top:10px">
+            ${g.completed ? `<button class="btn sm" data-a="reopen">Reopen</button>` : `<button class="btn sm gold" data-a="viz" data-id="${g.id}">Visualize</button><button class="btn sm" data-a="manifested">Mark manifested</button><button class="btn sm ${g.focus ? 'gold' : ''}" data-a="focus" aria-pressed="${!!g.focus}">${g.focus ? '★ In focus' : '☆ Focus'}</button>`}
+            <button class="btn sm" data-a="edit">Edit</button>
+          </div></div></div>
+      ${g.affirmation ? `<div><h4>Affirmation</h4><p class="quote">“${esc(g.affirmation)}”</p><button class="btn sm" style="margin-top:10px" data-a="speak">🔊 Hear it</button></div>` : ''}
+      ${sec('The vision — how it feels, done', g.desc)}${sec('Why it matters', g.why)}
+      <div><h4>Steps</h4>
+        ${ms(g).map((m, i) => `<div class="row" style="flex-wrap:nowrap;align-items:flex-start"><button class="msline ${m.done ? 'on' : ''}" data-a="ms" data-id="${g.id}" data-i="${i}" aria-pressed="${!!m.done}"><span class="check ${m.done ? 'on' : ''}">✓</span><span style="overflow-wrap:anywhere">${esc(m.text)}</span></button><button class="del" data-a="msdel" data-i="${i}" aria-label="Remove step">×</button></div>`).join('')}
+        <form class="inline" data-f="ms" style="margin-top:8px"><input type="text" name="t" placeholder="Add the next step…" aria-label="New step" autocomplete="off"><button class="btn sm">Add</button></form></div>
+      ${g.obstacle || g.plan ? `<div class="two">${sec('Likely obstacle', g.obstacle)}${sec('If it shows up, I will…', g.plan)}</div>` : ''}
+      ${g.completed ? '' : `<div><h4>Belief — how real does it feel? <b style="color:var(--text)">${g.belief || 5}/10</b></h4><input type="range" min="1" max="10" value="${g.belief || 5}" data-c="belief" aria-label="Belief level"></div>`}
+      <div><h4>Journal</h4>
+        <form class="inline" data-f="log"><select name="k" aria-label="Entry type"><option value="act">Action taken</option><option value="sign">Evidence / sign</option><option value="note">Note</option></select><input type="text" name="t" placeholder="What happened?" aria-label="Journal entry" autocomplete="off"><button class="btn sm">Log</button></form>
+        ${log.length ? `<ul class="log" style="margin-top:12px">${log.map(l => { const k = LOGK[l.k] || LOGK.note; return `<li><time>${fdate(l.d)}</time><span style="overflow-wrap:anywhere"><b style="color:${k[1]}">${k[0]}</b>${esc(l.text)}</span></li>`; }).join('')}</ul>` : `<p class="small mute" style="margin-top:8px">Log actions you take and evidence you notice. Both build belief.</p>`}</div>
+      <div><button class="btn sm danger" data-a="delete">Delete sankalpa</button></div>
+    </div></div>`;
+}
+function openDetail(id) { S.detailId = id; const d = $('#detailDlg'); d.innerHTML = detailHTML(byId(id)); if (!d.open) d.showModal(); d.scrollTop = 0; }
+
+/* ---------- create / edit form ---------- */
+function openForm(id) {
+  const g = id ? byId(id) : {}; S.editId = id || null;
+  const isData = (g.image || '').startsWith('data:'); S.formImage = isData ? g.image : '';
+  const f = (name, label, hint, el) => `<label class="f"><span><b>${label}</b>${hint ? ' — ' + hint : ''}</span>${el}</label>`;
+  const d = $('#formDlg');
+  d.innerHTML = `<form data-f="goal" method="dialog">
+    <div class="dhead"><button type="button" class="x" data-a="close" aria-label="Close">×</button><span class="tag">${id ? 'Refine' : 'New'} sankalpa</span><h2>${id ? 'Edit your resolve' : 'What are you calling in?'}</h2></div>
+    <div class="dbody" style="gap:16px">
+      ${f('title', 'The goal', 'specific, in your words', `<div class="inline"><input type="text" name="title" required maxlength="160" value="${esc(g.title)}" placeholder="e.g. Publish the translation by March"><button type="button" class="btn sm" id="micBtn" hidden>🎙 Speak</button></div>`)}
+      <div class="f"><span><b>Area of life</b></span><div class="chips">${Object.entries(AREAS).map(([k, a]) => `<label class="chip" style="--ac:${a.c}" title="${a.hint}"><input type="radio" name="area" value="${k}" ${(g.area || 'dharma') === k ? 'checked' : ''}>${a.name}</label>`).join('')}</div></div>
+      ${f('affirmation', 'Affirmation', 'present tense, as if already true', `<input type="text" name="affirmation" maxlength="220" value="${esc(g.affirmation)}" placeholder="I am so grateful now that…">`)}
+      ${f('desc', 'The vision', 'what do you see, hear and feel when it is done?', `<textarea name="desc" rows="3" placeholder="Sensory details of the completed reality…">${esc(g.desc)}</textarea>`)}
+      ${f('why', 'Why it matters', '', `<textarea name="why" rows="2" placeholder="Who benefits? What does it make possible?">${esc(g.why)}</textarea>`)}
+      <div class="two">
+        ${f('due', 'Target date', '', `<input type="date" name="due" value="${esc(g.due)}">`)}
+        ${f('image', 'Vision image', 'https link or upload', `<div class="inline"><input type="url" name="image" value="${isData ? '' : esc(g.image)}" placeholder="${isData ? 'Photo attached' : 'https://…'}"><label class="btn sm" style="cursor:pointer">Upload<input type="file" accept="image/*" data-c="file" hidden></label></div>`)}
+      </div>
+      <div class="row" id="imgPrev" ${S.formImage ? '' : 'hidden'}><div class="thumb" style="background-image:${esc(bgImg(S.formImage))}"></div><button type="button" class="btn sm" data-a="rmimg">Remove photo</button></div>
+      ${id ? '' : f('milestones', 'Steps', 'one per line; you can add more later', `<textarea name="milestones" rows="3" placeholder="First step&#10;Second step"></textarea>`)}
+      <div class="two">
+        ${f('obstacle', 'Likely obstacle', 'the inner one', `<input type="text" name="obstacle" maxlength="200" value="${esc(g.obstacle)}" placeholder="e.g. I put it off when tired">`)}
+        ${f('plan', 'If it shows up, I will…', '', `<input type="text" name="plan" maxlength="200" value="${esc(g.plan)}" placeholder="e.g. do just ten minutes">`)}
+      </div>
+      <div class="row" style="justify-content:flex-end"><button type="button" class="btn ghost" data-a="close">Cancel</button><button class="btn gold">${id ? 'Save changes' : 'Set sankalpa'}</button></div>
+    </div></form>`;
+  d.showModal(); d.scrollTop = 0;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = $('#micBtn', d);
+  if (SR) { mic.hidden = false; const rec = new SR(); mic.onclick = () => { try { rec.start(); mic.textContent = 'Listening…'; } catch (e) { rec.stop(); } }; rec.onresult = e => { d.querySelector('[name=title]').value = e.results[0][0].transcript; }; rec.onend = () => { mic.textContent = '🎙 Speak'; }; }
+}
+function shrink(file, max) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', .72)); };
+    img.onerror = rej; img.src = url;
+  });
+}
+
+/* ---------- full-screen sessions ---------- */
+let run = null;
+const dur = t => Math.max(5000, String(t).length * 95);
+function speak(t) { if (!('speechSynthesis' in window) || S.muted || !t) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.rate = .85; speechSynthesis.speak(u); }
+function play(steps, onDone) {
+  if (run) clearTimeout(run.timer);
+  run = { steps, i: -1, onDone, timer: null };
+  const st = $('#stage'); st.hidden = false;
+  st.innerHTML = `<div class="s-top"><button class="btn sm" data-a="mute">${S.muted ? '🔇 Voice off' : '🔊 Voice on'}</button><button class="btn sm" data-a="stop" aria-label="End session">× End</button></div><div class="orb idle"></div><p class="s-sub"></p><h2 class="s-main" aria-live="polite"></h2><button class="btn sm ghost s-next" data-a="snext">Next ›</button><div class="s-prog"><i></i></div>`;
+  advance();
+}
+function advance() {
+  clearTimeout(run.timer); run.i++;
+  if (run.i >= run.steps.length) { const cb = run.onDone; endStage(); cb && cb(); return; }
+  const s = run.steps[run.i], st = $('#stage');
+  st.style.backgroundImage = bgImg(s.img) || 'none';
+  $('.orb', st).className = 'orb ' + (s.mode || 'idle');
+  $('.s-sub', st).textContent = s.sub || '';
+  const m = $('.s-main', st); m.textContent = s.main; if (s.lang) m.lang = s.lang; else m.removeAttribute('lang');
+  m.style.animation = 'none'; void m.offsetWidth; m.style.animation = '';
+  $('.s-prog i', st).style.width = (run.i + 1) / run.steps.length * 100 + '%';
+  speak(s.say);
+  run.timer = setTimeout(advance, s.ms || dur(s.main));
+}
+function endStage() { if (run) clearTimeout(run.timer); run = null; if ('speechSynthesis' in window) speechSynthesis.cancel(); $('#stage').hidden = true; }
+function startViz(g) {
+  for (const d of document.querySelectorAll('dialog[open]')) d.close();
+  const br = [{ sub: 'Breathe', main: 'Breathe in', mode: 'in', ms: 4000, say: 'Breathe in' }, { sub: 'Breathe', main: 'Hold', mode: 'hold', ms: 4000 }, { sub: 'Breathe', main: 'Release', mode: 'out', ms: 6000, say: 'and release' }];
+  const lines = (g.desc || '').split(/(?<=[.!?।])\s+|\n+/).map(t => t.trim()).filter(Boolean);
+  const aff = (g.affirmation || '').trim(), ns = nextStep(g), img = g.image;
+  const steps = [
+    { sub: 'Visualization', main: 'Let the body be still. Close your eyes whenever you wish.', say: 'Let the body be still. Close your eyes whenever you wish.', ms: 7000 },
+    ...br, ...br, ...br,
+    { sub: 'It is already done', main: g.title, say: 'See it clearly. ' + g.title + '. It is already done.', ms: dur(g.title) + 4000, img },
+    ...lines.map(t => ({ sub: 'Feel it', main: t, say: t, ms: dur(t) + 2500, img })),
+    ...(g.why ? [{ sub: 'Why it matters', main: g.why, say: g.why, ms: dur(g.why) + 2000, img }] : []),
+    ...(aff ? [1, 2, 3].map(n => ({ sub: `Affirm · ${n} of 3`, main: aff, say: aff, ms: dur(aff) + 1500, img })) : []),
+    ...(ns ? [{ sub: 'One step today', main: ns.text, say: 'Today, one step. ' + ns.text, ms: dur(ns.text) + 3000 }] : []),
+    { sub: 'So be it', main: 'तथास्तु', lang: 'sa', say: 'It is done.', ms: 5000 }
+  ];
+  play(steps, () => { saveDay({ visualized: true }); addLog(g, 'viz', 'Guided visualization'); toast('Visualization complete'); });
+}
+function startStream() {
+  const act = active(); if (!act.length) return toast('Create a sankalpa first');
+  for (const d of document.querySelectorAll('dialog[open]')) d.close();
+  play(act.map(g => { const t = affOf(g); return { sub: area(g).name + (g.affirmation ? ' · ' + g.title : ''), main: t, say: t, ms: dur(t) + 3000, img: g.image }; }),
+    () => { saveDay({ affirmed: true }); toast('Affirmations complete'); });
+}
+function confetti() {
+  const c = $('#confetti'), x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#f6c453', '#ff9a3c', '#f472b6', '#a78bfa', '#34d399'];
+  const P = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight * .4, vx: (Math.random() - .5) * 16, vy: Math.random() * -15 - 3, s: Math.random() * 7 + 3, c: cols[Math.random() * 5 | 0], r: Math.random() * 6 }));
+  let t = 0; (function f() { x.clearRect(0, 0, c.width, c.height); for (const p of P) { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += .2; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .6); x.restore(); } if (++t < 150) requestAnimationFrame(f); else x.clearRect(0, 0, c.width, c.height); })();
+}
+
+/* ---------- actions ---------- */
+const cur = () => byId(S.detailId);
+const actions = {
+  new: () => openForm(),
+  edit: () => openForm(S.detailId),
+  open: el => openDetail(el.dataset.id),
+  close: el => el.closest('dialog').close(),
+  set: el => { S[el.dataset.k] = el.dataset.v; paint(); },
+  ms: el => { const g = byId(el.dataset.id), i = +el.dataset.i, list = ms(g).map(m => ({ ...m })); list[i].done = !list[i].done; list[i].doneAt = list[i].done ? today() : null; saveGoal(g.id, { milestones: list }); if (list.every(m => m.done) && !g.completed) toast('Every step done — ready to mark it manifested?'); },
+  msdel: el => { const g = cur(); saveGoal(g.id, { milestones: ms(g).filter((_, i) => i !== +el.dataset.i) }); },
+  focus: () => { const g = cur(); saveGoal(g.id, { focus: !g.focus }); },
+  manifested: () => { const g = cur(); saveGoal(g.id, { completed: true, completedAt: today() }); confetti(); toast('तथास्तु — it is done.'); },
+  reopen: () => saveGoal(S.detailId, { completed: false, completedAt: null }),
+  delete: () => { const g = cur(); if (confirm(`Delete “${g.title}”? This cannot be undone.`)) { $('#detailDlg').close(); deleteDoc(doc(db, GOALS, g.id)).catch(fail); } },
+  speak: () => { const m = S.muted; S.muted = false; speak(cur().affirmation); S.muted = m; },
+  viz: el => { const g = byId(el.dataset.id) || byId(S.vizGoal) || active()[0]; g ? startViz(g) : toast('Create a sankalpa first'); },
+  stream: startStream,
+  stop: endStage,
+  snext: advance,
+  mute: el => { S.muted = !S.muted; el.textContent = S.muted ? '🔇 Voice off' : '🔊 Voice on'; if (S.muted && 'speechSynthesis' in window) speechSynthesis.cancel(); },
+  rmimg: () => { S.formImage = ''; $('#imgPrev').hidden = true; const i = $('#formDlg [name=image]'); i.value = ''; i.placeholder = 'https://…'; },
+  export: () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), goals: S.goals, days: S.days }, null, 2)], { type: 'application/json' })); a.download = `sankalpa-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href); }
+};
+const changes = {
+  intention: el => saveDay({ intention: el.value.trim() }),
+  script: el => saveDay({ script: el.value }),
+  win: el => saveDay({ win: el.value }),
+  grat: el => { const g = [0, 1, 2].map(i => (day().gratitude || [])[i] || ''); g[+el.dataset.i] = el.value.trim(); saveDay({ gratitude: g }); },
+  belief: el => saveGoal(S.detailId, { belief: +el.value }),
+  vizGoal: el => { S.vizGoal = el.value; },
+  s369goal: el => saveDay({ s369: { goalId: el.value } }),
+  file: async el => {
+    const file = el.files[0]; if (!file) return;
+    try { let u = await shrink(file, 900); if (u.length > 600000) u = await shrink(file, 560); S.formImage = u; const p = $('#imgPrev'); p.hidden = false; $('.thumb', p).style.backgroundImage = bgImg(u); const i = $('#formDlg [name=image]'); i.value = ''; i.placeholder = 'Photo attached'; }
+    catch (e) { toast('Could not read that image'); }
+  }
+};
+const forms = {
+  goal: f => {
+    const v = Object.fromEntries(new FormData(f)), t = k => (v[k] || '').trim();
+    if (!t('title')) return;
+    const data = { title: t('title'), desc: t('desc'), area: v.area || 'dharma', affirmation: t('affirmation'), why: t('why'), due: v.due || '', obstacle: t('obstacle'), plan: t('plan'), image: S.formImage || (bgImg(t('image')) ? t('image') : '') };
+    if (t('image') && !S.formImage && !data.image) toast('Image link ignored — it must start with https://');
+    if (S.editId) saveGoal(S.editId, data);
+    else addDoc(collection(db, GOALS), { ...data, milestones: (v.milestones || '').split('\n').map(s => s.trim()).filter(Boolean).map(text => ({ text, done: false })), completed: false, focus: false, belief: 5, log: [], createdAt: serverTimestamp() }).catch(fail);
+    $('#formDlg').close(); toast(S.editId ? 'Saved' : 'Sankalpa set');
+  },
+  ms: f => { const t = f.t.value.trim(), g = cur(); if (!t) return; S.refocus = '#detailDlg form[data-f=ms] input'; f.t.blur(); saveGoal(g.id, { milestones: [...ms(g), { text: t, done: false }] }); },
+  log: f => { const t = f.t.value.trim(); if (!t) return; f.t.blur(); addLog(cur(), f.k.value, t); },
+  s369: f => {
+    if (!f.t.value.trim()) return;
+    const s = { ...(day().s369 || {}) }, sel = $('[data-c=s369goal]');
+    s.m = s.m || 0; s.a = s.a || 0; s.n = s.n || 0; if (sel) s.goalId = sel.value;
+    if (s.m < 3) s.m++; else if (s.a < 6) s.a++; else if (s.n < 9) s.n++;
+    S.refocus = 'form[data-f=s369] input'; f.t.blur(); saveDay({ s369: s });
+    if (s.m + s.a + s.n === 18) toast('3 · 6 · 9 complete');
+  }
+};
+
+/* ---------- render loop ---------- */
+let pending = false, ptr = false;
+function paint() {
+  pending = false;
+  document.querySelectorAll('.nav a').forEach(a => { const on = a.hash === '#' + S.tab; a.classList.toggle('on', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
+  $('#view').innerHTML = S.error ? `<div class="card empty"><h3>Could not reach the database</h3><p>${esc(S.error)}</p></div>` : !S.loaded ? `<div class="empty">Connecting…</div>` : views[S.tab]();
+  const d = $('#detailDlg');
+  if (d.open) { const g = cur(); if (g) { const y = d.scrollTop; d.innerHTML = detailHTML(g); d.scrollTop = y; } else d.close(); }
+  if (S.refocus) { const el = $(S.refocus); S.refocus = null; el && el.focus(); }
+}
+function render() {
+  const a = document.activeElement;
+  const typing = a && a.matches('input:not([type=range]):not([type=file]):not([type=radio]),textarea,select') && !a.closest('#formDlg');
+  if (ptr || typing) { pending = true; return; }
+  paint();
+}
+const flush = () => setTimeout(() => { if (pending) render(); }, 0);
+addEventListener('pointerdown', () => { ptr = true; }, true);
+for (const ev of ['pointerup', 'pointercancel']) addEventListener(ev, () => setTimeout(() => { ptr = false; if (pending) render(); }, 0), true);
+addEventListener('focusout', flush);
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]');
+  if (el) { e.preventDefault(); actions[el.dataset.a]?.(el); return; }
+  if (e.target.matches('dialog')) e.target.close();   // click on backdrop
+});
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role=button]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && run) endStage(); });
+document.addEventListener('change', e => { const c = e.target.dataset?.c; if (c) changes[c]?.(e.target); });
+document.addEventListener('submit', e => { const f = e.target.dataset.f; if (f) { e.preventDefault(); forms[f]?.(e.target); } });
+const route = () => { const t = location.hash.slice(1); S.tab = views[t] ? t : 'today'; paint(); scrollTo(0, 0); };
+addEventListener('hashchange', route);
+
+/* ---------- live data ---------- */
+if (TEST) $('#testBadge').innerHTML = '<em>TEST DATA</em>';
+route();
+onSnapshot(query(collection(db, GOALS), orderBy('createdAt', 'desc')), snap => {
+  S.goals = snap.docs.map(d => ({ ...d.data(), id: d.id })); S.loaded = true; S.error = ''; render();
+}, e => { S.error = e.message; render(); });
+onSnapshot(collection(db, DAYS), snap => { S.days = {}; snap.forEach(d => { S.days[d.id] = d.data(); }); render(); }, e => console.warn('Daily ritual log unavailable:', e.message));
+</script>
+</body>
+</html>
